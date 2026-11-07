@@ -5,7 +5,6 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { useSearchParams } from 'next/navigation';
 
-// Tipe data pesan (any diganti dengan Timestamp | null)
 interface GuestMessage {
   id: string;
   name: string;
@@ -16,14 +15,18 @@ interface GuestMessage {
 function GuestbookForm() {
   const searchParams = useSearchParams();
   
-  // Mengambil nama otomatis dari URL
-  const guestName = searchParams.get('to') || 'Our Honored Guest';
+  // 1. Variabel bahasa diletakkan di posisi yang benar
+  const lang = searchParams.get('lang') || 'id';
+  
+  // 2. Default nama tamu disesuaikan dengan bahasanya
+  const guestName = searchParams.get('to') || (lang === 'en' ? 'Our Honored Guest' : 'Tamu Kehormatan');
 
   const [messages, setMessages] = useState<GuestMessage[]>([]);
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const [visibleCount, setVisibleCount] = useState(5);
 
-  // Mengambil data dari Firebase Real-time
   useEffect(() => {
     const q = query(collection(db, 'guestbook'), orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -36,7 +39,6 @@ function GuestbookForm() {
     return () => unsubscribe();
   }, []);
 
-  // Fungsi mengirim pesan ke Firebase
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;
@@ -51,7 +53,7 @@ function GuestbookForm() {
       setMessage('');
     } catch (error) {
       console.error("Error adding document: ", error);
-      alert("Gagal mengirim pesan.");
+      alert(lang === 'en' ? "Failed to send message." : "Gagal mengirim pesan.");
     } finally {
       setIsSubmitting(false);
     }
@@ -59,17 +61,20 @@ function GuestbookForm() {
 
   return (
     <div className="w-full py-20 px-6 bg-[#f4f5f0] text-center flex flex-col items-center">
-      <h3 className="text-3xl md:text-4xl font-sans text-forest mb-4">Wishes & Blessings</h3>
+      <h3 className="text-3xl md:text-4xl font-sans text-forest mb-4">
+        {lang === 'en' ? 'Wishes & Blessings' : 'Doa & Restu'}
+      </h3>
       <p className="text-xs md:text-sm font-light text-forest/70 leading-relaxed max-w-md mb-12">
-        {/* Tanda kutip tunggal sudah diperbaiki menggunakan &apos; */}
-        Doa dan restu Anda sangat berarti bagi kami dalam memulai perjalanan ini di dalam kasih karunia Tuhan!
+        {lang === 'en' 
+          ? "Your wishes and blessings mean so much to us as we begin this journey together in God's grace!" 
+          : "Doa dan restu Anda sangat berarti bagi kami dalam memulai perjalanan ini di dalam kasih karunia Tuhan!"}
       </p>
 
       {/* Form Input */}
       <form onSubmit={handleSubmit} className="w-full max-w-md mb-12 flex items-center gap-4">
         <input 
           type="text" 
-          placeholder="Give your wish..." 
+          placeholder={lang === 'en' ? 'Give your wish...' : 'Berikan doa restu...'}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           required
@@ -84,33 +89,48 @@ function GuestbookForm() {
             isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:brightness-105'
           }`}
         >
-          <span>{isSubmitting ? '...' : 'Send'}</span>
+          <span>{isSubmitting ? '...' : (lang === 'en' ? 'Send' : 'Kirim')}</span>
           {!isSubmitting && <span className="text-sm">↗️</span>}
         </button>
       </form>
 
       {/* Daftar Pesan Guestbook */}
-      <div className="w-full max-w-md flex flex-col text-left space-y-6 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#8fa492] pr-4">
+      <div className="w-full max-w-md flex flex-col text-left space-y-6 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-[#8fa492] pr-4 pb-4">
         {messages.length === 0 ? (
           <p className="text-center text-forest/50 font-light italic text-sm">
-            Jadilah yang pertama memberikan doa restu!
+            {lang === 'en' ? 'Be the first to send wishes!' : 'Jadilah yang pertama memberikan doa restu!'}
           </p>
         ) : (
-          messages.map((msg) => (
-            <div key={msg.id} className="border-b border-forest/20 pb-4">
-              <p className="font-bold text-forest text-sm md:text-base mb-1">{msg.name}</p>
-              {msg.createdAt && (
-                <p className="text-[10px] text-forest/50 mb-3 uppercase tracking-wider">
-                  {new Date(msg.createdAt.toDate()).toLocaleDateString('id-ID', { 
-                    day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' 
-                  })}
+          <>
+            {messages.slice(0, visibleCount).map((msg) => (
+              <div key={msg.id} className="border-b border-forest/20 pb-4">
+                <p className="font-bold text-forest text-sm md:text-base mb-1">{msg.name}</p>
+                {msg.createdAt && (
+                  <p className="text-[10px] text-forest/50 mb-3 uppercase tracking-wider">
+                    {/* Format tanggal disesuaikan dengan bahasa */}
+                    {new Date(msg.createdAt.toDate()).toLocaleDateString(lang === 'en' ? 'en-US' : 'id-ID', { 
+                      day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' 
+                    })}
+                  </p>
+                )}
+                <p className="text-sm font-light text-forest/80 leading-relaxed">
+                  {msg.message}
                 </p>
-              )}
-              <p className="text-sm font-light text-forest/80 leading-relaxed">
-                {msg.message}
-              </p>
-            </div>
-          ))
+              </div>
+            ))}
+            
+            {/* Tombol Load More */}
+            {visibleCount < messages.length && (
+              <div className="flex justify-center pt-4">
+                <button 
+                  onClick={() => setVisibleCount(prev => prev + 5)}
+                  className="px-6 py-2 border border-forest text-forest text-[10px] uppercase tracking-widest rounded-full hover:bg-forest hover:text-[#f4f5f0] transition-all duration-300"
+                >
+                  {lang === 'en' ? 'View More Wishes' : 'Lihat Ucapan Lainnya'}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
