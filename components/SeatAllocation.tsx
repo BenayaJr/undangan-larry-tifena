@@ -10,18 +10,17 @@ function SeatInfo() {
 
   return (
     <div className="w-full text-center px-6 py-20 bg-forest text-offwhite border-y border-champagne/20">
-      <h3 className="text-4xl font-vibes text-champagne mb-2">Reservation Details</h3>
+      <h3 className="text-4xl font-vibes text-champagne mb-2">Detail Reservasi</h3>
       <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-offwhite/60 mb-10">
-        Attendance Information
+        INFORMASI KEHADIRAN
       </p>
       
       <div className="max-w-md mx-auto border border-champagne/30 p-8 rounded-lg bg-forest/50 backdrop-blur-sm shadow-lg">
         <p className="text-sm font-light leading-relaxed mb-4 text-offwhite/90">
-          Dear <span className="font-bold text-champagne uppercase tracking-wider">{guestName}</span>,
+          Kepada Yth. <span className="font-bold text-champagne uppercase tracking-wider">{guestName}</span>,
         </p>
         <p className="text-xs md:text-sm font-light leading-relaxed mb-8 text-offwhite/80">
-          We joyfully anticipate your presence at our wedding reception. 
-          Please note that we have reserved:
+          Kami sangat menantikan kehadiran Anda pada acara resepsi pernikahan kami. Kami telah mengalokasikan:
         </p>
         
         <div className="text-6xl font-serif text-champagne mb-4 drop-shadow-md">
@@ -29,7 +28,7 @@ function SeatInfo() {
         </div>
         
         <p className="text-[10px] uppercase tracking-widest text-offwhite/80">
-          Seat(s) In Your Honor
+          KURSI UNTUK ANDA
         </p>
       </div>
     </div>

@@ -62,7 +62,7 @@ function GuestbookForm() {
       <h3 className="text-3xl md:text-4xl font-sans text-forest mb-4">Wishes & Blessings</h3>
       <p className="text-xs md:text-sm font-light text-forest/70 leading-relaxed max-w-md mb-12">
         {/* Tanda kutip tunggal sudah diperbaiki menggunakan &apos; */}
-        Your wishes and blessings mean so much to us as we begin this journey together in God&apos;s grace!
+        Doa dan restu Anda sangat berarti bagi kami dalam memulai perjalanan ini di dalam kasih karunia Tuhan!
       </p>
 
       {/* Form Input */}

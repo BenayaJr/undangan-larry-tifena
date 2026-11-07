@@ -8,12 +8,11 @@ export default function DressCode() {
 
   return (
     <div className="w-full text-center px-6 py-16 bg-offwhite">
-      <h3 className="text-5xl font-vibes text-forest mb-2">Attire Guide</h3>
-      <p className="text-[10px] text-forest/70 uppercase tracking-[0.3em] font-bold mb-8">What to wear</p>
+      <h3 className="text-5xl font-vibes text-forest mb-2">Panduan Busana</h3>
+      <p className="text-[10px] text-forest/70 uppercase tracking-[0.3em] font-bold mb-8">TEMA WARNA</p>
       
       <p className="text-xs italic text-forest/80 max-w-[280px] mx-auto mb-10 leading-relaxed font-serif">
-        &quot;We would love to see our family and friends coordinate with our wedding color palette. 
-        However, your presence is what matters most!&quot;
+        &quot;Kami akan sangat berbahagia jika keluarga dan sahabat berkenan hadir mengenakan warna senada dengan tema pernikahan kami. Namun, kehadiran Anda tetaplah yang paling bermakna!&quot;
       </p>
       
       <div className="flex flex-wrap justify-center gap-4 md:gap-5">
