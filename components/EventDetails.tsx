@@ -4,11 +4,11 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
 function EventDetailsContent() {
-  // Mengambil parameter bahasa dari URL, default ke 'id' (Indonesia)
   const searchParams = useSearchParams();
   const lang = searchParams.get('lang') || 'id';
 
-  const gCalLink = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Resepsi+Pernikahan%3A+Larry+%26+Tifena&dates=20261117T110000Z/20261117T140000Z&details=Merupakan+suatu+kehormatan+dan+kebahagiaan+bagi+kami+apabila+Bapak%2FIbu%2FSaudara%28i%29+berkenan+hadir.&location=Restaurant+Bamboodent+1,+Makassar,+South+Sulawesi";
+  // Waktu diubah ke 10:30 UTC (18:30 WITA) sampai 13:30 UTC (21:30 WITA)
+  const gCalLink = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Resepsi+Pernikahan%3A+Larry+%26+Tifena&dates=20261117T103000Z/20261117T133000Z&details=Merupakan+suatu+kehormatan+dan+kebahagiaan+bagi+kami+apabila+Bapak%2FIbu%2FSaudara%28i%29+berkenan+hadir.&location=Restaurant+Bamboodent+1,+Makassar,+South+Sulawesi";
 
   return (
     <div className="w-full py-20 px-6 bg-offwhite text-center flex flex-col items-center">
@@ -58,7 +58,8 @@ function EventDetailsContent() {
         <p className="text-5xl font-serif text-champagne mb-2">17</p>
         <p className="text-forest uppercase tracking-widest text-xs mb-8">
           November 2026 <br/> 
-          {lang === 'en' ? '07:00 PM (WITA) onwards' : '19:00 WITA s/d Selesai'}
+          {/* Update waktu ke 18:30 WITA / 06:30 PM */}
+          {lang === 'en' ? '06:30 PM (WITA) onwards' : '18:30 WITA s/d Selesai'}
         </p>
 
         <h4 className="font-serif text-forest text-lg mb-2">Restaurant Bamboodent 1</h4>
